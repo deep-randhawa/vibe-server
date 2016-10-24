@@ -1,0 +1,29 @@
+{
+  "name": "vibe-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "bookshelf": "^0.10.2",
+    "express": "^4.14.0",
+    "knex": "^0.12.6",
+    "pg": "^6.1.0",
+    "winston": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hermes95/vibe-server.git"
+  },
+  "keywords": [],
+  "author": "Deep Randhawa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hermes95/vibe-server/issues"
+  },
+  "homepage": "https://github.com/hermes95/vibe-server#readme"
+}
