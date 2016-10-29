@@ -8,6 +8,9 @@ const Logger      = require('./log');
 
 const app         = express();
 
+// routes
+const routes      = require('./routes/index')
+
 var config = null;
 
 // read `config.json` for db details
@@ -39,6 +42,8 @@ fs.readFile('config.json', 'utf8', function (err, data) {
   app.use(body_parser.json());
   app.use(body_parser.urlencoded({extended: 'false'}));
 
+  // set up routes
+  app.use('/', routes);
 
   // start the server
   http.createServer(app)
