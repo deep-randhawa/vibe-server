@@ -1,15 +1,15 @@
-const express     = require('express');
-const path        = require('path');
-const fs          = require('fs');
-const db          = require('./models');
-const body_parser = require('body-parser');
-const http        = require('http');
-const Logger      = require('./log');
+const express       = require('express');
+const path          = require('path');
+const fs            = require('fs');
+const body_parser   = require('body-parser');
+const http          = require('http');
+const Logger        = require('./util/log');
 
-const app         = express();
+const app           = express();
 
 // routes
-const routes      = require('./routes/index')
+const routes        = require('./routes/index')
+const user          = require('./routes/user')
 
 var config = null;
 
@@ -35,7 +35,7 @@ fs.readFile('config.json', 'utf8', function (err, data) {
     dbConfig = configVars.db;
 
   // set up db connections
-  db.init(dbConfig);
+  // db.init(dbConfig);
 
   // set up app params
   app.set('port', process.env.PORT || port);
@@ -44,6 +44,7 @@ fs.readFile('config.json', 'utf8', function (err, data) {
 
   // set up routes
   app.use('/', routes);
+  app.use('/user', user);
 
   // start the server
   http.createServer(app)

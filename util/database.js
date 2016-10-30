@@ -1,10 +1,21 @@
-const Schema    = require('./schema');
+'use strict';
+
+const Schema    = require('../models/schema');
 const sequence  = require('when/sequence');
 const _         = require('lodash');
-const Logger    = require('../log');
-
-var knex, bookshelf;
-var db = {};
+const Logger    = require('./log');
+const knex      = require('knex')({
+  client: 'pg',
+  connection: {
+    "host": "127.0.0.1",
+    "database": "vibe_server_dev",
+    "user": "drandhaw",
+    "password": "",
+    "port": "5432",
+    "charset": "utf8"
+  }
+});
+const Bookshelf = require('bookshelf')(knex);
 
 function createTable(tableName) {
   return knex.schema.createTableIfNotExists(tableName, function (table) {
@@ -57,36 +68,14 @@ function createTables(){
   return sequence(tables);
 }
 
-var init = function (config, callback) {
-  knex = require('knex')({
-    client: config.client,
-    connection: config
-  });
-  bookshelf = require('bookshelf')(knex);
+Bookshelf.plugin('registry');
 
 createTables()
   .then(function() {
     Logger.info('Tables Created!');
-
-    // creating models
-    var User = bookshelf.Model.extend({
-      tableName: 'users'
-    })
-
-    // creating collection objects
-    var Users = bookshelf.Collection.extend({
-      model: User
-    })
-
   })
-  .catch(function (error) {
+  .catch(function(err) {
     Logger.error(error);
-  });
-}
+  })
 
-module.exports = {
-  Knex: knex,
-  Bookshelf: bookshelf,
-  init: init,
-  DB: db
-};
+module.exports = Bookshelf;
