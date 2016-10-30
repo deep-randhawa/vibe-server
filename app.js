@@ -11,44 +11,21 @@ const app           = express();
 const routes        = require('./routes/index')
 const user          = require('./routes/user')
 
-var config = null;
+// get `config.json` params
+const configName    = process.argv[2] || 'dev';
+const port          = require('./util/config')[configName].port;
 
-// read `config.json` for db details
-fs.readFile('config.json', 'utf8', function (err, data) {
-  if (err) {
-    if (err.code == 'ENOENT')
-      Logger.error('Unable to read file `config.json`');
-    process.exit(-1);
-  }
+// set up app params
+app.set('port', process.env.PORT || port);
+app.use(body_parser.json());
+app.use(body_parser.urlencoded({extended: 'false'}));
 
-  try {
-    config = JSON.parse(data);
-  } catch (e) {
-    Logger.error(e);
-    process.exit(-1);
-  }
+// set up routes
+app.use('/', routes);
+app.use('/user', user);
 
-  // config from `config.json` file
-  const configName = process.argv[2] || 'dev',
-    configVars = config[configName],
-    port = configVars.port,
-    dbConfig = configVars.db;
-
-  // set up db connections
-  // db.init(dbConfig);
-
-  // set up app params
-  app.set('port', process.env.PORT || port);
-  app.use(body_parser.json());
-  app.use(body_parser.urlencoded({extended: 'false'}));
-
-  // set up routes
-  app.use('/', routes);
-  app.use('/user', user);
-
-  // start the server
-  http.createServer(app)
-    .listen(app.get('port'), function() {
-      Logger.info('express server listening on port: ' + app.get('port'));
-    })
-})
+// start the server
+http.createServer(app)
+  .listen(app.get('port'), function() {
+    Logger.info('express server listening on port: ' + app.get('port'));
+});

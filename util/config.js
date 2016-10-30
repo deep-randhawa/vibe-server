@@ -1,31 +1,26 @@
-const fs      = require('fs');
-const Logger  = require('./log');
-
-var config    = null;
-
-fs.readFile('config.json', 'utf8', function(err, data) {
-  if (err) {
-    if (err.code == 'ENOENT')
-      Logger.error('Unable to read file `config.json`');
-    process.exit(-1);
-  }
-
-  try {
-    config = JSON.parse(data);
-  } catch (err) {
-    Logger.error(err);
-    process.exit(-1);
-  }
-
-  const configName = process.argv[2] || 'dev',
-    configVars = config[configName],
-    port = configVars.port,
-    dbConfig = configVars.db;
-})
-
-
-
 module.exports = {
-  port: port,
-  dbConfig: dbConfig
+  "dev": {
+    "port": 9000,
+    "db": {
+      "client": "pg",
+      "host": "127.0.0.1",
+      "database": "vibe_server_dev",
+      "user": "drandhaw",
+      "password": "",
+      "port": "5432",
+      "charset": "utf8"
+    }
+  },
+  "prod": {
+    "port": 8080,
+    "db": {
+      "client": "pg",
+      "host": "ec2-54-243-45-168.compute-1.amazonaws.com",
+      "database": "d29khvhpqq759k",
+      "user": "zllubghfwythxj",
+      "password": "gR1pBCnjLJtB1upo9D4B72mtnD",
+      "port": "5432",
+      "charset": "utf8"
+    }
+  }
 }

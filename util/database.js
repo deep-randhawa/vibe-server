@@ -4,16 +4,10 @@ const Schema    = require('../models/schema');
 const sequence  = require('when/sequence');
 const _         = require('lodash');
 const Logger    = require('./log');
+const config    = require('./config')[process.argv[2] || 'dev'];
 const knex      = require('knex')({
-  client: 'pg',
-  connection: {
-    "host": "127.0.0.1",
-    "database": "vibe_server_dev",
-    "user": "drandhaw",
-    "password": "",
-    "port": "5432",
-    "charset": "utf8"
-  }
+  client: config.db.client,
+  connection: config.db
 });
 const Bookshelf = require('bookshelf')(knex);
 
@@ -75,7 +69,7 @@ createTables()
     Logger.info('Tables Created!');
   })
   .catch(function(err) {
-    Logger.error(error);
+    Logger.error(err);
   })
 
 module.exports = Bookshelf;
