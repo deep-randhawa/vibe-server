@@ -22,8 +22,10 @@ Router
 Router
   .post('/', function(req, res, next) {
     User.forge({
-      name: req.body.name,
-      email: req.body.email
+      SPOTIFY_ID: req.body.SPOTIFY_ID,
+      FIRST_NAME: req.body.FIRST_NAME,
+      LAST_NAME: req.body.LAST_NAME,
+      EMAIL: req.body.EMAIL
     })
     .save()
     .then(function(user) {
