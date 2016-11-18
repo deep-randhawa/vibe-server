@@ -1,9 +1,10 @@
 var Schema = {
   users: {
-    SPOTIFY_ID: {type: 'string', nullable: false, unique: true},
-    FIRST_NAME: {type: 'string', nullable: false, unique: true},
-    LAST_NAME: {type: 'string', maxlength: 150, nullable: false},
-    EMAIL: {type: 'string', maxlength: 150, nullable: false}
+    id: {type: 'increments', nullable: false, primary: true},
+    spotify_id: {type: 'string', nullable: false, unique: true},
+    first_name: {type: 'string', maxlength: 150, nullable: false},
+    last_name: {type: 'string', maxlength: 150, nullable: false},
+    email: {type: 'string', maxlength: 150, nullable: false}
   }
 };
 module.exports = Schema;

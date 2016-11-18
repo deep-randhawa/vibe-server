@@ -3,38 +3,38 @@ const User    = require('../models/user')
 const Logger  = require('../util/log.js')
 const Router  = require('express').Router();
 
-Router
-  .get('/', function(req, res, next) {
-    Users.forge()
-      .fetch()
-      .then(function(collection) {
-        res.json({error: false, data: collection.toJSON()});
-      })
-      .catch(function(err) {
-        res.status(500).json({
-          error: true,
-          data: {
-            message: err.message
-          }
-        })
-      });
-
-Router
-  .post('/', function(req, res, next) {
-    User.forge({
-      SPOTIFY_ID: req.body.SPOTIFY_ID,
-      FIRST_NAME: req.body.FIRST_NAME,
-      LAST_NAME: req.body.LAST_NAME,
-      EMAIL: req.body.EMAIL
-    })
-    .save()
-    .then(function(user) {
-      res.json({error: false, data: {id: user.get('id')}});
+Router.get('/', function(req, res, next) {
+  Users.forge()
+    .fetch()
+    .then(function(collection) {
+      res.json(collection.toJSON());
     })
     .catch(function(err) {
-      res.status(500).json({error: true, data: {message: err.message}});
+      res.status(500).json({
+        message: err.message
+      })
+    })
+});
+
+Router.post('/', function(req, res, next) {
+  User.forge({
+    spotify_id: req.body.spotify_id,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email
+  })
+  .save()
+  .then(function(user) {
+    res.json({
+      id: user.get('id')
     })
   })
-})
+  .catch(function(err) {
+    console.log(err)
+    res.status(500).json({
+      message: err.message
+    })
+  });
+});
 
 module.exports = Router

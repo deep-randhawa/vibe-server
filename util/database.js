@@ -32,6 +32,9 @@ function createTable(tableName) {
       else {
         column.notNullable();
       }
+      if (Schema[tableName][key].hasOwnProperty('increments')) {
+        column.increments();
+      }
       if (Schema[tableName][key].hasOwnProperty('primary') && Schema[tableName][key].primary === true) {
         column.primary();
       }
