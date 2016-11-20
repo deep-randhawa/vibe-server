@@ -5,7 +5,7 @@ module.exports = {
       "client": "pg",
       "host": "127.0.0.1",
       "database": "vibe_server_dev",
-      "user": "deep",
+      "user": "drandhaw",
       "password": "",
       "port": "5432",
       "charset": "utf8"

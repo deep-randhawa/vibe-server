@@ -16,6 +16,25 @@ Router.get('/', function(req, res, next) {
     })
 });
 
+Router.get('/:id', function(req, res, next) {
+  User.forge({id: req.params.id})
+    .fetch()
+    .then(function(user) {
+      if (!user) {
+        res.status(404)
+          .type('json')
+          .send('Unable to find user w/ id=' + req.params.id);
+      } else {
+        res.json(user.toJSON());
+      }
+    })
+    .catch(function(err) {
+      res.status(500).json({
+        message: err.message
+      })
+    })
+});
+
 Router.post('/', function(req, res, next) {
   User.forge({
     spotify_id: req.body.spotify_id,
@@ -26,7 +45,11 @@ Router.post('/', function(req, res, next) {
   .save()
   .then(function(user) {
     res.json({
-      id: user.get('id')
+      id: user.get('id'),
+      first_name: user.get('first_name'),
+      last_name: user.get('last_name'),
+      email: user.get('email'),
+      spotify_id: user.get('spotify_id')
     })
   })
   .catch(function(err) {
