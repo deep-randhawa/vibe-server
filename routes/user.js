@@ -22,8 +22,7 @@ Router.get('/:id', function(req, res, next) {
     .then(function(user) {
       if (!user) {
         res.status(404)
-          .type('json')
-          .send('Unable to find user w/ id=' + req.params.id);
+          .json('Unable to find user w/ id=' + req.params.id);
       } else {
         res.json(user.toJSON());
       }
@@ -34,6 +33,7 @@ Router.get('/:id', function(req, res, next) {
       })
     })
 });
+
 
 Router.post('/', function(req, res, next) {
   User.forge({
@@ -53,11 +53,57 @@ Router.post('/', function(req, res, next) {
     })
   })
   .catch(function(err) {
-    console.log(err)
     res.status(500).json({
       message: err.message
     })
   });
+});
+
+
+Router.put('/:id', function(req, res, next) {
+  User.forge({id: req.params.id})
+    .fetch({require: true})
+    .then(function(user) {
+      user.save({
+        first_name: req.body.first_name || user.get('first_name'),
+        last_name: req.body.last_name || user.get('last_name'),
+        email: req.body.email || user.get('email')
+      })
+      .then(function() {
+        res.json('User details updated');
+      })
+      .catch(function(err) {
+        res.status(500).json({
+          message: err.message
+        })
+      });
+    })
+    .catch(function(err) {
+      res.status(500).json({
+        message: err.message
+      })
+    })
+});
+
+Router.delete('/:id', function(req, res, next) {
+  User.forge({id: req.params.id})
+    .fetch({require: true})
+    .then(function(user) {
+      user.destroy()
+      .then(function() {
+        res.json('User successfully deleted');
+      })
+      .catch(function(err) {
+        res.status(500).json({
+          message: err.message
+        })
+      })
+    })
+    .catch(function(err) {
+      res.status(500).json({
+        message: err.message
+      })
+    });
 });
 
 module.exports = Router
