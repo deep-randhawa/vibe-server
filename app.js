@@ -10,6 +10,7 @@ const app           = express();
 // routes
 const routes        = require('./routes/index')
 const user          = require('./routes/user')
+const request       = require('./routes/request')
 
 // get `config.json` params
 const configName    = process.argv[2] || 'dev';
@@ -23,6 +24,7 @@ app.use(body_parser.urlencoded({extended: 'false'}));
 // set up routes
 app.use('/', routes);
 app.use('/user', user);
+app.use('/request', request);
 
 // start the server
 http.createServer(app)

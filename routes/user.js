@@ -1,6 +1,6 @@
-const Users   = require('../collections/users')
-const User    = require('../models/user')
-const Logger  = require('../util/log.js')
+const Users   = require('../collections/users');
+const User    = require('../models/user');
+const Logger  = require('../util/log.js');
 const Router  = require('express').Router();
 
 Router.get('/', function(req, res, next) {
@@ -37,19 +37,19 @@ Router.get('/:id', function(req, res, next) {
 
 Router.post('/', function(req, res, next) {
   User.forge({
-    spotify_id: req.body.spotify_id,
-    first_name: req.body.first_name,
-    last_name: req.body.last_name,
-    email: req.body.email
+    spotify_id    : req.body.spotify_id,
+    first_name    : req.body.first_name,
+    last_name     : req.body.last_name,
+    email         : req.body.email
   })
   .save()
   .then(function(user) {
     res.json({
-      id: user.get('id'),
-      first_name: user.get('first_name'),
-      last_name: user.get('last_name'),
-      email: user.get('email'),
-      spotify_id: user.get('spotify_id')
+      id          : user.get('id'),
+      first_name  : user.get('first_name'),
+      last_name   : user.get('last_name'),
+      email       : user.get('email'),
+      spotify_id  : user.get('spotify_id')
     })
   })
   .catch(function(err) {
@@ -65,9 +65,9 @@ Router.put('/:id', function(req, res, next) {
     .fetch({require: true})
     .then(function(user) {
       user.save({
-        first_name: req.body.first_name || user.get('first_name'),
-        last_name: req.body.last_name || user.get('last_name'),
-        email: req.body.email || user.get('email')
+        first_name  : req.body.first_name || user.get('first_name'),
+        last_name   : req.body.last_name || user.get('last_name'),
+        email       : req.body.email || user.get('email')
       })
       .then(function() {
         res.json('User details updated');
