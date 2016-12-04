@@ -12,6 +12,10 @@ var Schema = {
     id: {type: 'increments', nullable: false, primary: true},
     song_id: {type: 'string', nullable: false, unique: false},
     user_id: {type: 'integer', nullable: false, unsigned: true},
+    num_votes: {type: 'integer', unsigned: true},
+    song_name: {type: 'string', nullable: false},
+    artist_name: {type: 'string', nullable: true},
+    album_name: {type: 'string', nullable: true},
     created_at: {type: 'dateTime', nullable: false},
     updated_at: {type: 'dateTime', nullable: true}
   }
