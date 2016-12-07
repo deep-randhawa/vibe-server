@@ -18,7 +18,6 @@ Router.get('/:user_id', function(req, res, next) {
 });
 
 Router.post('/', function(req, res, next) {
-  console.log(req.body);
   Request.forge({
     song_id       : req.body.song_id,
     user_id       : req.body.user_id,
@@ -40,7 +39,6 @@ Router.post('/', function(req, res, next) {
     })
   })
   .catch(function(err) {
-    console.log(err);
     res.status(500).json({
       message: err.message
     })
