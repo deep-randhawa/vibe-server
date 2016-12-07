@@ -6,6 +6,7 @@ const Router    = require('express').Router();
 Router.get('/:user_id', function(req, res, next) {
   Requests.forge()
     .query('where', {'user_id': req.params.user_id})
+    .orderBy('num_votes', "DESC")
     .fetch({require: true})
     .then(function(collection) {
       res.json(collection.toJSON());
