@@ -17,6 +17,30 @@ Router.get('/:user_id', function(req, res, next) {
     })
 });
 
+// assumes that the song_id is already present in the database for the user_id
+Router.post('/:user_id/:song_id', function(req, res, next) {
+  Request.forge({song_id: req.params.song_id, user_id: req.params.user_id})
+    .fetch({require: true})
+    .then(function(request) {
+      request.save({
+        num_votes : request.get('num_votes') + 1
+      })
+      .then(function() {
+        res.json('Added vote!')
+      })
+      .catch(function(err) {
+        res.status(500).json({
+          message: err.message
+        })
+      })
+    })
+    .catch(function(err) {
+      res.status(500).json({
+        message: err.message
+      })
+    })
+})
+
 Router.post('/vote/:song_id', function(req, res, next) {
   Request.forge({song_id: req.params.song_id})
     .fetch({require: true})
@@ -52,7 +76,6 @@ Router.post('/', function(req, res, next) {
   .save()
   .then(function(request) {
     res.json({
-      id          : request.get('id'),
       song_id     : request.get('song_id'),
       user_id     : request.get('user_id'),
       num_votes   : request.get('num_votes'),
