@@ -17,6 +17,29 @@ Router.get('/:user_id', function(req, res, next) {
     })
 });
 
+Router.post('/vote/:song_id', function(req, res, next) {
+  Request.forge({song_id: req.params.song_id})
+    .fetch({require: true})
+    .then(function(request) {
+      request.save({
+        num_votes : request.get('num_votes') + 1
+      })
+        .then(function() {
+          res.json('Added vote!')
+        })
+        .catch(function(err) {
+          res.status(500).json({
+            message: err.message
+          })
+        })
+    })
+    .catch(function(err) {
+      res.status(500).json({
+        message: err.message
+      })
+    })
+})
+
 Router.post('/', function(req, res, next) {
   Request.forge({
     song_id       : req.body.song_id,
