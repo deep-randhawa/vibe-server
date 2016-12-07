@@ -54,7 +54,7 @@ Router.post('/', function(req, res, next) {
         Request.forge({
           song_id       : req.body.song_id,
           user_id       : req.body.user_id,
-          num_votes     : req.body.num_votes || 0,
+          num_votes     : req.body.num_votes || 1,
           song_name     : req.body.song_name,
           artist_name   : req.body.artist_name,
           album_name    : req.body.album_name
