@@ -35,6 +35,7 @@ Router.post('/:user_id/:song_id', function(req, res, next) {
       })
     })
     .catch(function(err) {
+      console.log(err.message)
       res.status(500).json({
         message: err.message
       })
@@ -42,30 +43,44 @@ Router.post('/:user_id/:song_id', function(req, res, next) {
 })
 
 Router.post('/', function(req, res, next) {
-  Request.forge({
-    song_id       : req.body.song_id,
-    user_id       : req.body.user_id,
-    num_votes     : req.body.num_votes || 0,
-    song_name     : req.body.song_name,
-    artist_name   : req.body.artist_name,
-    album_name    : req.body.album_name
-  })
-  .save()
-  .then(function(request) {
-    res.json({
-      song_id     : request.get('song_id'),
-      user_id     : request.get('user_id'),
-      num_votes   : request.get('num_votes'),
-      song_name   : request.get('song_name'),
-      artist_name : request.get('artist_name'),
-      album_name  : request.get('album_name')
+  Request.forge({song_id: req.body.song_id, user_id: req.body.user_id})
+    .fetch({require: true})
+    .then(function(request) {
+      res.redirect(307, 'request/' + req.body.user_id + '/' + req.body.song_id);
     })
-  })
-  .catch(function(err) {
-    res.status(500).json({
-      message: err.message
+    .catch(function(err) {
+      if (err.message === 'EmptyResponse') {
+        Request.forge({
+          song_id       : req.body.song_id,
+          user_id       : req.body.user_id,
+          num_votes     : req.body.num_votes || 0,
+          song_name     : req.body.song_name,
+          artist_name   : req.body.artist_name,
+          album_name    : req.body.album_name
+        })
+        .save()
+        .then(function(request) {
+          res.json({
+            song_id     : request.get('song_id'),
+            user_id     : request.get('user_id'),
+            num_votes   : request.get('num_votes'),
+            song_name   : request.get('song_name'),
+            artist_name : request.get('artist_name'),
+            album_name  : request.get('album_name')
+          })
+        })
+        .catch(function(err) {
+          res.status(500).json({
+            message: err.message
+          })
+        })
+      }
+      else {
+        res.status(500).json({
+          message: err.message
+        })
+      }
     })
-  })
 });
 
 Router.delete('/:user_id', function(req, res, next) {
