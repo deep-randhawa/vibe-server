@@ -50,6 +50,7 @@ Router.post('/', function(req, res, next) {
       res.redirect(307, 'request/' + req.body.user_id + '/' + req.body.song_id);
     })
     .catch(function(err) {
+      console.log('got here')
       if (err.message === 'EmptyResponse') {
         Request.forge({
           song_id       : req.body.song_id,
