@@ -47,10 +47,19 @@ Router.post('/', function(req, res, next) {
   Request.forge({song_id: req.body.song_id, user_id: req.body.user_id})
     .fetch({require: true})
     .then(function(request) {
-      res.redirect(307, 'request/' + req.body.user_id + '/' + req.body.song_id);
+      request.save({
+        num_votes : request.get('num_votes') + 1
+      })
+      .then(function() {
+        res.json('Added vote!')
+      })
+      .catch(function(err) {
+        res.status(500).json({
+          message: err.message
+        })
+      })
     })
     .catch(function(err) {
-      console.log('got here')
       if (err.message === 'EmptyResponse') {
         Request.forge({
           song_id       : req.body.song_id,
