@@ -94,6 +94,20 @@ Router.post('/', function(req, res, next) {
     })
 });
 
+Router.delete('/req/:req_id', function(req, res, next) {
+  Request.forge({id: req.params.req_id})
+    .fetch()
+    .delete()
+    .then(function() {
+      res.send('OK')
+    })
+    .catch(function(err){
+      res.status(500).json({
+        message: err.message
+      })
+    })
+})
+
 Router.delete('/:user_id', function(req, res, next) {
   Request.forge()
     .query('where', {'user_id': req.params.user_id})
